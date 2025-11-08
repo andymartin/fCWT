@@ -36,7 +36,7 @@ limitations under the License.
 #include <complex>
 #include <iostream>
 
-#ifndef SINGLE_THREAD
+#if !defined(SINGLE_THREAD)
     #include <omp.h>
 #endif
 #ifdef _WIN32
