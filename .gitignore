@@ -1,2 +1,42 @@
 *.DS_Store
 __pycache__
+
+# Build artifacts
+CMakeFiles/
+CMakeCache.txt
+CTestTestfile.cmake
+Makefile
+cmake_install.cmake
+install_manifest.txt
+*.cmake
+
+# Libraries and executables
+*.dylib
+*.so
+*.dll
+*.a
+*.lib
+fCWT_example
+fCWT_benchmark
+
+# Build directories
+build/
+Build/
+
+# Generated files
+*.o
+*.obj
+*.exe
+*.pdb
+*.ilk
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
