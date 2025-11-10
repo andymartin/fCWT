@@ -53,9 +53,14 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 
 if(UNIX)
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -mavx -O2")
+    # Check if we're on ARM64 (Apple Silicon) and don't use AVX
+    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O2")
+    else()
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -mavx -O2")
+    endif()
 elseif(WIN32)
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /arch:AVX /O2 /W1")
+ 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /arch:AVX /O2 /W1")
 endif()
 
 #set cmake linker flags
@@ -124,8 +129,14 @@ link_directories("${PROJECT_SOURCE_DIR}/libs")
 link_directories("/usr/local/lib")
 
 if(APPLE)
-    set(OpenMP_INCLUDES "/usr/local/opt/libomp/include")
-    set(OpenMP_LIBRARIES "/usr/local/opt/libomp/lib")
+    # Check if we're on Apple Silicon (arm64) and use correct Homebrew path
+    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64" OR CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+        set(OpenMP_INCLUDES "/opt/homebrew/opt/libomp/include")
+        set(OpenMP_LIBRARIES "/opt/homebrew/opt/libomp/lib")
+    else()
+        set(OpenMP_INCLUDES "/usr/local/opt/libomp/include")
+        set(OpenMP_LIBRARIES "/usr/local/opt/libomp/lib")
+    endif()
     set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp")
     set(OpenMP_CXX_FLAGS "-Xpreprocessor -fopenmp")
     set(OpenMP_C_LIB_NAMES "libomp" "libgomp" "libiomp5")
